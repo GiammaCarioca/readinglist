@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useAuthContext } from '../hooks/useAuthContext'
 
 // firebase imports
 import { auth } from '../firebase/config'
@@ -6,6 +7,7 @@ import { createUserWithEmailAndPassword } from 'firebase/auth'
 
 export const useSignup = () => {
   const [error, setError] = useState(null)
+  const { dispatch } = useAuthContext()
 
   const signup = async (email, password) => {
     setError(null)
@@ -18,7 +20,8 @@ export const useSignup = () => {
         password
       )
 
-      console.log('user signed up:', userCredential.user)
+      // console.log('user signed up:', userCredential.user)
+      dispatch({ type: 'LOGIN', payload: userCredential.user })
     } catch (err) {
       setError(err.message)
     }
